@@ -32,7 +32,8 @@ object Day1b extends Challenge {
         drive(t, newDir, acc ::: newCoords)
       }
     }
-    drive(xs, 'N', List((0,0)))
+
+    drive(xs, 'N', List((0, 0)))
   }
 
   def findRevisit(xs: List[(Int, Int)], acc: List[(Int, Int)]): (Int, Int) = xs match {

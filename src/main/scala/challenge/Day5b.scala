@@ -1,15 +1,12 @@
 package challenge
 
-import base.Challenge
-
 import java.security.MessageDigest
 
-import scala.annotation.tailrec
-import scala.io.Source
+import base.Challenge
 
 object Day5b extends Challenge {
 
-  def digest = MessageDigest.getInstance("MD5")
+  def digest: MessageDigest = MessageDigest.getInstance("MD5")
 
   def pwdChar(s: String): Option[(Char, Char)] = {
     val hash = digest.digest(s.getBytes)
@@ -19,7 +16,7 @@ object Day5b extends Challenge {
     } else None
   }
 
-  def find(seed: String) = {
+  def find(seed: String): String = {
     def inner(n: Int, m: Map[Int, Char]): String = m match {
       case s if s.size == 8 => (0 to 7).map(s(_)).mkString
       case _ => pwdChar(seed + n) match {

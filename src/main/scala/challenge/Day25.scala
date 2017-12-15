@@ -1,14 +1,15 @@
 package challenge
 
-import scala.collection.mutable
-import scala.io.Source
-
 import base.Challenge
+
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object Day25 extends Challenge {
 
-  val registry = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
-  val clock = mutable.ListBuffer[Int]()
+  val registry: mutable.Map[Char, Int] = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
+  val clock: ListBuffer[Int] = mutable.ListBuffer[Int]()
 
   abstract class Instruction {
     def exec: Int
@@ -17,14 +18,18 @@ object Day25 extends Challenge {
   case class Jump(a: String, b: String) extends Instruction {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
     val _b: AnyVal = if (b.forall(_.isLetter)) b.head else b.toInt
+
     def this(cmd: Array[String]) = {
       this(cmd.head.mkString, cmd.last.mkString)
     }
+
     def this(cmd: String) = {
       this(cmd split ' ' drop 1)
     }
-    override def toString = "jnz " + _a + " " + _b
-    override def exec = _a match {
+
+    override def toString: String = "jnz " + _a + " " + _b
+
+    override def exec: Int = _a match {
       case i: Int => if (i > 0) _b match {
         case j: Int => j
         case j: Char => registry(j)
@@ -38,11 +43,14 @@ object Day25 extends Challenge {
 
   case class Copy(a: String, b: Char) extends Instruction {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
+
     def this(cmd: String) = {
-      this((cmd split ' ' slice (1, 2)).mkString, cmd.split(' ').last.head)
+      this((cmd split ' ' slice(1, 2)).mkString, cmd.split(' ').last.head)
     }
-    override def toString = "cpy " + _a + " " + b
-    override def exec = _a match {
+
+    override def toString: String = "cpy " + _a + " " + b
+
+    override def exec: Int = _a match {
       case i: Int =>
         if (registry.keySet.contains(b)) registry(b) = i
         1
@@ -56,8 +64,10 @@ object Day25 extends Challenge {
     def this(cmd: String) {
       this(cmd.last)
     }
-    override def toString = "inc " + a
-    override def exec = {
+
+    override def toString: String = "inc " + a
+
+    override def exec: Int = {
       registry(a) += 1
       1
     }
@@ -67,8 +77,10 @@ object Day25 extends Challenge {
     def this(cmd: String) {
       this(cmd.last)
     }
-    override def toString = "dec " + a
-    override def exec = {
+
+    override def toString: String = "dec " + a
+
+    override def exec: Int = {
       registry(a) -= 1
       1
     }
@@ -76,8 +88,10 @@ object Day25 extends Challenge {
 
   case class Out(a: Char) extends Instruction {
     def this(cmd: String) = this(cmd.last)
-    override def toString = "out " + a
-    override def exec = {
+
+    override def toString: String = "out " + a
+
+    override def exec: Int = {
       val i = registry(a)
       (clock.toList.reverse, i) match {
         case (Nil, 0) => clock += 0; 1
@@ -102,6 +116,7 @@ object Day25 extends Challenge {
     registry('c') = 0
     registry('d') = 0
     clock.clear
+
     def inner(p: Int): Boolean = p match {
       case i if i >= instructions.length => false
       case i =>
@@ -110,12 +125,14 @@ object Day25 extends Challenge {
           val incr = instructions(i).exec
           if (incr != 0) inner(p + incr) else false
         }
-      }
+    }
+
     inner(0)
   }
 
   override def run(): Any = {
     def input = Source.fromResource("day25.txt").getLines.toList
+
     val instructions = input.map(parse)
     var a = 1
     while (!exec(a, instructions)) a += 1

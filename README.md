@@ -1,5 +1,5 @@
-# aoc2017
-Advent of Code 2017 (http://adventofcode.com/2017) personal exercises in Scala
+# aoc2016
+Advent of Code 2016 (http://adventofcode.com/2016) personal exercises in Scala
 
 
 For running these you need SBT (http://scala-sbt.org) installed. 

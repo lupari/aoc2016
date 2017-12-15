@@ -1,8 +1,8 @@
 package challenge
 
-import scala.io.Source
-
 import base.Challenge
+
+import scala.io.Source
 
 object Day6 extends Challenge {
 

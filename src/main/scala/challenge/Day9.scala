@@ -2,7 +2,6 @@ package challenge
 
 import base.Challenge
 
-import scala.annotation.tailrec
 import scala.io.Source
 
 object Day9 extends Challenge {

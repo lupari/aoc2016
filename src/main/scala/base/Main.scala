@@ -1,8 +1,8 @@
 package base
 
-import scala.collection.immutable.ListMap
-
 import challenge._
+
+import scala.collection.immutable.ListMap
 
 object Main extends App {
 
@@ -50,7 +50,7 @@ object Main extends App {
     "21" -> (Day21, "gcedfahb"),
     "21b" -> (Day21b, "hegbdcfa"),
     "22" -> (Day22, 1003),
-    "22b" -> (Day22b, Nil),
+    "22b" -> (Day22b, "^ Check the grid and take it from there ^"),
     "23" -> (Day23, 12330),
     "23b" -> (Day23b, 479008890),
     "24" -> (Day24, 464),
@@ -60,8 +60,10 @@ object Main extends App {
 
   def check(key: String): Unit = {
     val entry = challenges(key)
+    val t0 = System.currentTimeMillis()
     val (result, expected) = (entry._1.run(), entry._2)
-    println("result for " + key + " = " + result)
+    var t1 = System.currentTimeMillis()
+    println("Result for " + key + ":\t" + result + " (executed in " + (t1 - t0) + " ms)")
     assert(result == expected, "Bad test result for key " + key + ", expected " + expected + " but got " + result)
   }
 

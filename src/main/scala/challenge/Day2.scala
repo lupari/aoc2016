@@ -8,24 +8,24 @@ import scala.io.Source
 object Day2 extends Challenge {
 
   def nextDigit(d: Int, dir: Char): Int = dir match {
-      case 'D' => if (d + 3 > 9) d else d + 3
-      case 'R' => if (d % 3 == 0) d else d + 1
-      case 'U' => if (d - 3 < 1) d else d - 3
-      case 'L' => if ((d + 2) % 3 == 0) d else d - 1
-    }
+    case 'D' => if (d + 3 > 9) d else d + 3
+    case 'R' => if (d % 3 == 0) d else d + 1
+    case 'U' => if (d - 3 < 1) d else d - 3
+    case 'L' => if ((d + 2) % 3 == 0) d else d - 1
+  }
 
-    def getDigit(xs: List[Char], d: Int)(f: (Int, Char) => Int): Int = {
+  def getDigit(xs: List[Char], d: Int)(f: (Int, Char) => Int): Int = {
 
-      @tailrec
-      def enterDigit(s: List[Char], digit: Int): Int = s match {
-        case Nil => digit
-        case h :: t => {
-          enterDigit(t, f(digit, h))
-        }
+    @tailrec
+    def enterDigit(s: List[Char], digit: Int): Int = s match {
+      case Nil => digit
+      case h :: t => {
+        enterDigit(t, f(digit, h))
       }
-
-      enterDigit(xs, d)
     }
+
+    enterDigit(xs, d)
+  }
 
   override def run(): Any = {
     val source = Source.fromResource("day2.txt").getLines.toList

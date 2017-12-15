@@ -32,7 +32,8 @@ object Day1 extends Challenge {
         drive(t, newDir, acc ::: newCoords)
       }
     }
-    drive(xs, 'N', List((0,0)))
+
+    drive(xs, 'N', List((0, 0)))
   }
 
   override def run(): Any = {

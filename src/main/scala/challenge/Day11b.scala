@@ -8,12 +8,13 @@ object Day11b extends Challenge {
 
   sealed class Item(val element: String, val purpose: Char) {
     def isCounterpart(other: Item): Boolean = other.element.equals(element) && other.purpose != purpose
+
     override def toString: String = element.toUpperCase.substring(0, 2) + purpose
   }
 
   val inventory: ListBuffer[Map[String, Item]] = ListBuffer()
 
-  def canCoexist(items: List[Item]): Boolean =  {
+  def canCoexist(items: List[Item]): Boolean = {
     val pairing = items.groupBy(_.element)
     val singles = pairing.values.filter(_.size == 1).flatten
     singles.groupBy(_.purpose).size <= 1
@@ -36,7 +37,7 @@ object Day11b extends Challenge {
   def moveUp(items: (Item, Item), floor: Int): Any = {
     val (x, y) = items
     inventory(floor) -= (x.toString, y.toString)
-    inventory(floor + 1) += ((x.toString -> x), (y.toString -> y))
+    inventory(floor + 1) += (x.toString -> x, y.toString -> y)
   }
 
   def moveDown(item: Item, floor: Int): Any = {
@@ -45,7 +46,7 @@ object Day11b extends Challenge {
   }
 
   def getCounterparts(floor: Int): Option[List[Item]] = {
-    val pairs = inventory(floor).groupBy(_._2.element).values.filter (_.size == 2)
+    val pairs = inventory(floor).groupBy(_._2.element).values.filter(_.size == 2)
     if (pairs.nonEmpty) Option(List(pairs.head.head._2, pairs.head.last._2))
     else Option.empty
   }
@@ -99,7 +100,7 @@ object Day11b extends Challenge {
           val pair = getPair(e)
           moveUp((pair.head, pair.last), e)
           moves = moves + 1
-          e  = e + 1
+          e = e + 1
         } else {
           upwards = false
         }
@@ -120,28 +121,27 @@ object Day11b extends Challenge {
 
   override def run(): Any = {
     val items = List[Map[String, Item]](
-       Map(
-         "THG" -> new Item("Thulium", 'G'),
-         "THM" -> new Item("Thulium", 'M'),
-         "PLG" -> new Item("Plutonium", 'G'),
-         "STG" -> new Item("Strontium", 'G')
-       ), Map(
-         "PLM" -> new Item("Plutonium", 'M'),
-         "STM" -> new Item("Strontium", 'M')
-       ), Map(
-         "PRG" -> new Item("Promethium", 'G'),
-         "PRM" -> new Item("Promethium", 'M'),
-         "RUG" -> new Item("Ruthenium", 'G'),
-         "RUM" -> new Item("Ruthenium", 'M')
-       ), Map()
-      )
+      Map(
+        "THG" -> new Item("Thulium", 'G'),
+        "THM" -> new Item("Thulium", 'M'),
+        "PLG" -> new Item("Plutonium", 'G'),
+        "STG" -> new Item("Strontium", 'G'),
+        "ELG" -> new Item("Elerium", 'G'),
+        "ELM" -> new Item("Elerium", 'M'),
+        "DIM" -> new Item("Dilithium", 'M'),
+        "DIG" -> new Item("Dilithium", 'G')
+      ), Map(
+        "PLM" -> new Item("Plutonium", 'M'),
+        "STM" -> new Item("Strontium", 'M')
+      ), Map(
+        "PRG" -> new Item("Promethium", 'G'),
+        "PRM" -> new Item("Promethium", 'M'),
+        "RUG" -> new Item("Ruthenium", 'G'),
+        "RUM" -> new Item("Ruthenium", 'M')
+      ), Map()
+    )
 
-    items.foreach(i => inventory += i)
-    inventory.remove(0, 4)
-    items.foreach(i => inventory += i)
-    inventory(0) += (
-     ("ELG" -> new Item("Elerium", 'G')), ("ELM" -> new Item("Elerium", 'M')),
-     ("DIM" -> new Item("Dilithium", 'M')), ("DIG" -> new Item("Dilithium", 'G')))
+    items.foreach(inventory += _)
     solve()
   }
 

@@ -1,12 +1,12 @@
 package challenge
 
-import scala.io.Source
-
 import base.Challenge
+
+import scala.io.Source
 
 object Day20 extends Challenge {
 
-  case class Range(val from: Long, val to: Long)
+  case class Range(from: Long, to: Long)
 
   def merge(rs: List[Range], sep: List[Range] = Nil): List[Range] = rs match {
     case x :: y :: t =>

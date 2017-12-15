@@ -1,15 +1,16 @@
 package challenge
 
+import base.Challenge
+
 import scala.collection.mutable
 import scala.io.Source
-
-import base.Challenge
 
 object Day24 extends Challenge {
 
   case class Delta(x: Int, y: Int)
+
   case class Point(x: Int, y: Int, wall: Boolean, value: Int) {
-    def isOfInterest = value > -1
+    def isOfInterest: Boolean = value > -1
   }
 
   def getNext(p: Point, d: Delta, points: Array[Array[Point]]): Point = {
@@ -39,12 +40,12 @@ object Day24 extends Challenge {
     costs.toMap
   }
 
-  def dist(k: (Point, Point), m: Map[(Point, Point), Int]) = {
+  def dist(k: (Point, Point), m: Map[(Point, Point), Int]): Int = {
     // distance is symmetric so order of two points does not matter
     if (m.keySet.contains(k)) m(k) else m((k._2, k._1))
   }
 
-  def pathLength(path: List[Point], distances: Map[(Point, Point), Int]) =
+  def pathLength(path: List[Point], distances: Map[(Point, Point), Int]): Int =
     path.sliding(2).foldLeft(0)((a, b) => a + dist((b.head, b.last), distances))
 
   override def run(): Any = {
@@ -54,15 +55,17 @@ object Day24 extends Challenge {
         x => {
           val p = input(y)(x)
           Point(x, y, p == '#', if (p.isDigit) p.asDigit else -1)
-      })
+        })
     )
     val placesOfInterest = points.flatten.filter(p => p.isOfInterest)
     val pairs = placesOfInterest.combinations(2).map(p => (p.head, p.last))
+
     def costFn = (a: Point, b: Point) => math.abs(a.x - b.x) + math.abs(a.y - b.y)
+
     val distances = pairs.map(p => p -> aStar(p._1, p._2, points)(costFn)(p._2)).toMap
     val start = placesOfInterest.find(_.value == 0).get
     val paths = (placesOfInterest.toList diff List(start)).permutations.map(l => start +: l).toList
-    paths.toList.map(pathLength(_, distances)).min
+    paths.map(pathLength(_, distances)).min
   }
 
 }

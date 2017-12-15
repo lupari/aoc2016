@@ -1,12 +1,14 @@
 package challenge
 
 import base.Challenge
+
+import scala.collection.mutable
 import scala.io.Source
 
 object Day10b extends Challenge {
 
   trait handler {
-    val inventory = collection.mutable.SortedSet[Int]()
+    val inventory: mutable.SortedSet[Int] = collection.mutable.SortedSet[Int]()
   }
 
   case class Bot(id: Int) extends handler {
@@ -16,12 +18,12 @@ object Day10b extends Challenge {
 
   case class Output(id: Int) extends handler
 
-  def amountBots(s: String): Int = {
-    ("bot (\\d+)".r.findAllIn(s).matchData map (m => m.group(1).toInt)).toList.sorted.last
-  }
-  def amountOutputs(s: String): Int = {
-    ("output (\\d+)".r.findAllIn(s).matchData map (m => m.group(1).toInt)).toList.sorted.last
-  }
+  def amountBots(s: String): Int =
+    ("bot (\\d+)".r.findAllIn(s).matchData map (m => m.group(1).toInt)).toList.max
+
+  def amountOutputs(s: String): Int =
+    ("output (\\d+)".r.findAllIn(s).matchData map (m => m.group(1).toInt)).toList.max
+
 
   override def run(): Any = {
     val instructions = Source.fromResource("day10.txt").getLines.toList

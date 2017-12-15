@@ -1,20 +1,21 @@
 package challenge
 
-import scala.io.Source
-
 import base.Challenge
+
+import scala.io.Source
 
 object Day21b extends Challenge {
 
-  val pattRd = """rotate (right|left) (\d) step[s]*""".r
-  val pattSp = """swap position (\d) with position (\d)""".r
-  val pattRp = """rotate based on position of letter (\w)""".r
-  val pattSl = """swap letter (\w) with letter (\w)""".r
-  val pattRv = """reverse positions (\d) through (\d)""".r
-  val pattMv = """move position (\d) to position (\d)""".r
+  private val pattRd = """rotate (right|left) (\d) step[s]*""".r
+  private val pattSp = """swap position (\d) with position (\d)""".r
+  private val pattRp = """rotate based on position of letter (\w)""".r
+  private val pattSl = """swap letter (\w) with letter (\w)""".r
+  private val pattRv = """reverse positions (\d) through (\d)""".r
+  private val pattMv = """move position (\d) to position (\d)""".r
 
   abstract class Command {
     def exec(xs: String): String
+
     def revert(xs: String): String
   }
 
@@ -34,11 +35,13 @@ object Day21b extends Challenge {
 
   case class Reverse(a: Int, b: Int) extends Command {
     override def exec(xs: String): String = (xs take a) + xs.slice(a, b + 1).reverse + (xs takeRight xs.length - b - 1)
+
     override def revert(xs: String): String = exec(xs)
   }
 
   case class PositionSwap(a: Int, b: Int) extends Command {
     override def exec(xs: String): String = xs.updated(a, xs(b)).updated(b, xs(a))
+
     override def revert(xs: String): String = exec(xs)
   }
 
@@ -50,13 +53,16 @@ object Day21b extends Challenge {
         case h :: t if h == b => inner(t, acc :+ a)
         case h :: t => inner(t, acc :+ h)
       }
+
       inner(xs.toList, "")
     }
+
     override def revert(xs: String): String = exec(xs)
   }
 
   case class RotateDirection(dir: Char, by: Int) extends Command with RotateCommand {
     override def exec(xs: String): String = rotate(if (dir == 'R') -by else by, xs.toList).mkString
+
     override def revert(xs: String): String = rotate(if (dir == 'L') -by else by, xs.toList).mkString
   }
 
@@ -66,6 +72,7 @@ object Day21b extends Challenge {
       val by = i + (if (i >= 4) 2 else 1)
       rotate(-by, xs.toList).mkString
     }
+
     override def revert(xs: String): String = {
       xs.indexOf(c) match {
         case 0 => rotate(1, xs.toList).mkString
@@ -86,6 +93,7 @@ object Day21b extends Challenge {
       val (h, t) = (xs diff c) splitAt b
       h + c.mkString + t
     }
+
     override def revert(xs: String): String = {
       val c = List(xs(b))
       val (h, t) = (xs diff c) splitAt a
@@ -110,6 +118,7 @@ object Day21b extends Challenge {
         val command = getCmd(h)
         inner(command.revert(xs), t)
     }
+
     inner(s, cmd.reverse)
   }
 

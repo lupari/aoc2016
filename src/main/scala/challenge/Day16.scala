@@ -4,23 +4,18 @@ import base.Challenge
 
 object Day16 extends Challenge {
 
+
   def dragonCurve(n: Int, s: String): String = {
-    def widen(x: String): String = {
-      val sb = new StringBuilder(s.length * 2 + 1).append(x).append('0')
-      for {
-        i <- x.indices
-      } yield {
-        if (x(i) == '0') sb.append('1') else sb.append('0')
-      }
-      sb.toString
+    def dc(s: String) = {
+      s + '0' + s.reverse.replace('1', '2').replace('0', '1').replace('2', '0')
     }
-    var dc = s
-    while (dc.length <= n) dc = widen(dc)
-    dc take n
+
+    lazy val generator: Stream[String] = s #:: generator.map(dc)
+    generator.find(_.length > n).get.take(n)
   }
 
   def checksum(s: String): String = {
-    def narrow(s: String): String = {
+    def compress(s: String): String = {
       val cs = new StringBuilder(s.length / 2 + 1)
       for {
         i <- s.indices by 2
@@ -29,9 +24,9 @@ object Day16 extends Challenge {
       }
       cs.toString
     }
-    var cs = s
-    while (cs.length % 2 == 0) cs = narrow(cs)
-    cs
+
+    lazy val generator: Stream[String] = s #:: generator.map(compress)
+    generator.find(_.length % 2 == 1).head.mkString
   }
 
   override def run(): Any = {

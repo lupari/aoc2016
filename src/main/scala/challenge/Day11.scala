@@ -136,7 +136,7 @@ object Day11 extends Challenge {
        ), Map()
       )
 
-    items.foreach(i => inventory += i)
+    items.foreach(inventory += _)
     solve()
   }
 

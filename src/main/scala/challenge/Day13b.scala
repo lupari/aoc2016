@@ -3,14 +3,16 @@ package challenge
 import base.Challenge
 
 import scala.collection.mutable
-import scala.io.Source
 
 object Day13b extends Challenge {
 
   case class Delta(x: Int, y: Int)
+
   case class Point(x: Int, y: Int) {
     def withinBoundaries: Boolean = x > -1 && y > -1
+
     def +(delta: Delta): Point = Point(x + delta.x, y + delta.y)
+
     def isWall: Boolean = {
       val bin = (x * x + 3 * x + 2 * x * y + y + y * y + 1362).toBinaryString
       bin.count(_ == '1') % 2 == 1
@@ -42,7 +44,7 @@ object Day13b extends Challenge {
 
   override def run(): Any = {
     val (start, end) = (Point(1, 1), Point(31, 39))
-    aStar(start, end)((_,_) => 0).values.count(_ <= 50)
+    aStar(start, end)((_, _) => 0).values.count(_ <= 50)
   }
 
 }

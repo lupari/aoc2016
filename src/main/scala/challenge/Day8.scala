@@ -2,14 +2,14 @@ package challenge
 
 import base.Challenge
 
-import scala.collection.mutable
+import scala.collection.immutable
 import scala.io.Source
 
 object Day8 extends Challenge {
 
-  val display = Array.ofDim[Int](6, 50)
+  val display: Array[Array[Int]] = Array.ofDim[Int](6, 50)
 
-  def drawRect(cmd: String) = {
+  def drawRect(cmd: String): immutable.IndexedSeq[Unit] = {
     val Array(w, h) = (cmd split " " takeRight 1).mkString.split("x") map (_.toInt)
     for {
       x <- 0 until w
@@ -17,7 +17,7 @@ object Day8 extends Challenge {
     } yield display(y)(x) = 1
   }
 
-  def rotate(cmd: String) = {
+  def rotate(cmd: String): Unit = {
     val Array(n) = cmd.split(" ") takeRight 1 map (_.toInt)
     val Array(z) = cmd.split(" ").slice(2, 3) map (a => a drop 2) map (_.toInt)
     val vertical = cmd.contains("column")
@@ -35,7 +35,7 @@ object Day8 extends Challenge {
     }
   }
 
-  def runCommand(cmd: String) = cmd match {
+  def runCommand(cmd: String): Any = cmd match {
     case x if x.startsWith("rect") => drawRect(x)
     case x if x.startsWith("rotate") => rotate(x)
   }

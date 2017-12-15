@@ -1,8 +1,8 @@
 package challenge
 
-import scala.annotation.tailrec
-
 import base.Challenge
+
+import scala.annotation.tailrec
 
 object Day18b extends Challenge {
 

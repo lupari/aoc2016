@@ -1,14 +1,15 @@
 package challenge
 
-import scala.collection.mutable
-import scala.io.Source
-
 import base.Challenge
+
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object Day23b extends Challenge {
 
-  val registry = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
-  val instructions = mutable.ListBuffer[Instruction]()
+  val registry: mutable.Map[Char, Int] = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
+  val instructions: ListBuffer[Instruction] = mutable.ListBuffer[Instruction]()
 
   abstract class Instruction {
     def exec(args: AnyVal*): Int
@@ -17,14 +18,18 @@ object Day23b extends Challenge {
   case class Jump(a: String, b: String) extends Instruction {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
     val _b: AnyVal = if (b.forall(_.isLetter)) b.head else b.toInt
+
     def this(cmd: Array[String]) = {
       this(cmd.head.mkString, cmd.last.mkString)
     }
+
     def this(cmd: String) = {
       this(cmd split ' ' drop 1)
     }
-    override def toString = "jnz " + _a + " " + _b
-    override def exec(args: AnyVal*) = _a match {
+
+    override def toString: String = "jnz " + _a + " " + _b
+
+    override def exec(args: AnyVal*): Int = _a match {
       case i: Int => if (i > 0) _b match {
         case j: Int => j
         case j: Char => registry(j)
@@ -38,11 +43,14 @@ object Day23b extends Challenge {
 
   case class Copy(a: String, b: Char) extends Instruction {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
+
     def this(cmd: String) = {
-      this((cmd split ' ' slice (1, 2)).mkString, cmd.split(' ').last.head)
+      this((cmd split ' ' slice(1, 2)).mkString, cmd.split(' ').last.head)
     }
-    override def toString = "cpy " + _a + " " + b
-    override def exec(args: AnyVal*) = _a match {
+
+    override def toString: String = "cpy " + _a + " " + b
+
+    override def exec(args: AnyVal*): Int = _a match {
       case i: Int =>
         if (registry.keySet.contains(b)) registry(b) = i
         1
@@ -56,8 +64,10 @@ object Day23b extends Challenge {
     def this(cmd: String) {
       this(cmd.last)
     }
-    override def toString = "inc " + a
-    override def exec(args: AnyVal*) = {
+
+    override def toString: String = "inc " + a
+
+    override def exec(args: AnyVal*): Int = {
       registry(a) += 1
       1
     }
@@ -67,8 +77,10 @@ object Day23b extends Challenge {
     def this(cmd: String) {
       this(cmd.last)
     }
-    override def toString = "dec " + a
-    override def exec(args: AnyVal*) = {
+
+    override def toString: String = "dec " + a
+
+    override def exec(args: AnyVal*): Int = {
       registry(a) -= 1
       1
     }
@@ -76,26 +88,30 @@ object Day23b extends Challenge {
 
   case class Multi(a: Char, b: Char, c: Char) extends Instruction {
     def this(cmd: Array[String]) {
-      this(cmd.head.head, cmd.slice(1,2).head.head, cmd.last.head)
+      this(cmd.head.head, cmd.slice(1, 2).head.head, cmd.last.head)
     }
+
     def this(cmd: String) {
       this(cmd split ' ' drop 1)
     }
-    override def toString = "mlt " + a + " " + b + " " + c
-    override def exec(args: AnyVal*) = {
+
+    override def toString: String = "mlt " + a + " " + b + " " + c
+
+    override def exec(args: AnyVal*): Int = {
       registry(c) = registry(a) * registry(b)
       1
     }
   }
 
   class Nop extends Instruction {
-    override def exec(args: AnyVal*) = 1
+    override def exec(args: AnyVal*): Int = 1
   }
 
   case class Toggle(a: Char) extends Instruction {
     def this(cmd: String) {
       this(cmd.last)
     }
+
     def toggleInstruction(x: Instruction): Instruction = x match {
       case i: Inc => Dec(i.a)
       case i: Dec => Inc(i.a)
@@ -103,8 +119,10 @@ object Day23b extends Challenge {
       case i: Jump => Copy(i.a, i.b.head)
       case i: Copy => Jump(i.a, i.b.toString)
     }
-    override def toString = "tgl " + a
-    override def exec(args: AnyVal*) = args(0) match {
+
+    override def toString: String = "tgl " + a
+
+    override def exec(args: AnyVal*): Int = args(0) match {
       case cp: Int =>
         val i = cp + registry(a)
         if (0 <= i && i < instructions.length) {
@@ -135,7 +153,7 @@ object Day23b extends Challenge {
     val input = Source.fromResource("day23b.txt").getLines.toList
     instructions ++= input.map(parse)
     registry('a') = 12
-    exec
+    exec()
     registry('a')
   }
 
