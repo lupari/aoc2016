@@ -7,7 +7,8 @@ import scala.collection.mutable.ListBuffer
 object Day11b extends Challenge {
 
   sealed class Item(val element: String, val purpose: Char) {
-    def isCounterpart(other: Item): Boolean = other.element.equals(element) && other.purpose != purpose
+    def isCounterpart(other: Item): Boolean =
+      other.element.equals(element) && other.purpose != purpose
 
     override def toString: String = element.toUpperCase.substring(0, 2) + purpose
   }
@@ -91,8 +92,8 @@ object Day11b extends Challenge {
   }
 
   def solve(): Int = {
-    var e = 0
-    var moves = 0
+    var e       = 0
+    var moves   = 0
     var upwards = true
     while (inventory.last.values.size < itemCount) {
       while (upwards) {
@@ -122,23 +123,26 @@ object Day11b extends Challenge {
   override def run(): Any = {
     val items = List[Map[String, Item]](
       Map(
-        "THG" -> new Item("Thulium", 'G'),
-        "THM" -> new Item("Thulium", 'M'),
+        "PLM" -> new Item("Plutonium", 'M'),
         "PLG" -> new Item("Plutonium", 'G'),
+        "STM" -> new Item("Strontium", 'M'),
         "STG" -> new Item("Strontium", 'G'),
         "ELG" -> new Item("Elerium", 'G'),
         "ELM" -> new Item("Elerium", 'M'),
         "DIM" -> new Item("Dilithium", 'M'),
         "DIG" -> new Item("Dilithium", 'G')
-      ), Map(
-        "PLM" -> new Item("Plutonium", 'M'),
-        "STM" -> new Item("Strontium", 'M')
-      ), Map(
-        "PRG" -> new Item("Promethium", 'G'),
-        "PRM" -> new Item("Promethium", 'M'),
+      ),
+      Map(
+        "THG" -> new Item("Thulium", 'G'),
         "RUG" -> new Item("Ruthenium", 'G'),
-        "RUM" -> new Item("Ruthenium", 'M')
-      ), Map()
+        "RUM" -> new Item("Ruthenium", 'M'),
+        "CUG" -> new Item("Curium", 'G'),
+        "CUM" -> new Item("Curium", 'M'),
+      ),
+      Map(
+        "THM" -> new Item("Thulium", 'M'),
+      ),
+      Map()
     )
 
     items.foreach(inventory += _)

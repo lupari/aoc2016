@@ -13,7 +13,7 @@ object Day22b extends Challenge {
   }
 
   override def run(): Any = {
-    val input = Source.fromResource("day22.txt").getLines.toList
+    val input   = Source.fromResource("day22.txt").getLines.toList
     val pattern = """^.*-x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)T\s+(\d+)%$""".r
     val nodes = input.drop(2).map {
       case pattern(x, y, size, used, avail, load) => Node(y.toInt, x.toInt, used.toInt, avail.toInt)
@@ -21,6 +21,7 @@ object Day22b extends Challenge {
     val rows = nodes.groupBy(_.y)
     val grid = rows.keys.toList.indices.map(rows(_))
     // Display the damn grid. Lets solve this by hand from there.
+    // Should find shortest path from '_' to top-right corner, then from there to top-left
     println(grid.map(_.mkString(" ")).mkString("\n"))
     "^ Check the grid and take it from there ^"
   }

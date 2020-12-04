@@ -24,27 +24,28 @@ object Day1b extends Challenge {
     }
 
     @tailrec
-    def drive(xs: List[(Char, Int)], dir: Char, acc: List[(Int, Int)]): List[(Int, Int)] = xs match {
-      case Nil => acc
-      case h :: t => {
-        val newDir = nextDir(dir, h._1)
-        val newCoords = updateCoords(newDir, h._2, acc.last)
-        drive(t, newDir, acc ::: newCoords)
+    def drive(xs: List[(Char, Int)], dir: Char, acc: List[(Int, Int)]): List[(Int, Int)] =
+      xs match {
+        case Nil => acc
+        case h :: t =>
+          val newDir    = nextDir(dir, h._1)
+          val newCoords = updateCoords(newDir, h._2, acc.last)
+          drive(t, newDir, acc ::: newCoords)
       }
-    }
 
     drive(xs, 'N', List((0, 0)))
   }
 
+  @tailrec
   def findRevisit(xs: List[(Int, Int)], acc: List[(Int, Int)]): (Int, Int) = xs match {
     case h :: t => if (acc.count(_ == h) == 1) h else findRevisit(t, acc :+ h)
-    case Nil => throw new NoSuchElementException
+    case Nil    => throw new NoSuchElementException
   }
 
   override def run(): Any = {
-    val lines = Source.fromResource("day1.txt").mkString
-    val blocks = lines.trim.split(", ") map (b => (b.head, b.drop(1).toInt))
-    val route = getRoute(blocks.toList)
+    val lines          = Source.fromResource("day1.txt").mkString
+    val blocks         = lines.trim.split(", ") map (b => (b.head, b.drop(1).toInt))
+    val route          = getRoute(blocks.toList)
     val revisitedFirst = findRevisit(route, Nil)
     math.abs(revisitedFirst._1) + math.abs(revisitedFirst._2)
   }

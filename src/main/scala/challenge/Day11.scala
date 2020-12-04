@@ -7,13 +7,14 @@ import scala.collection.mutable.ListBuffer
 object Day11 extends Challenge {
 
   sealed class Item(val element: String, val purpose: Char) {
-    def isCounterpart(other: Item): Boolean = other.element.equals(element) && other.purpose != purpose
+    def isCounterpart(other: Item): Boolean =
+      other.element.equals(element) && other.purpose != purpose
     override def toString: String = element.toUpperCase.substring(0, 2) + purpose
   }
 
   val inventory: ListBuffer[Map[String, Item]] = ListBuffer()
 
-  def canCoexist(items: List[Item]): Boolean =  {
+  def canCoexist(items: List[Item]): Boolean = {
     val pairing = items.groupBy(_.element)
     val singles = pairing.values.filter(_.size == 1).flatten
     singles.groupBy(_.purpose).size <= 1
@@ -45,7 +46,7 @@ object Day11 extends Challenge {
   }
 
   def getCounterparts(floor: Int): Option[List[Item]] = {
-    val pairs = inventory(floor).groupBy(_._2.element).values.filter (_.size == 2)
+    val pairs = inventory(floor).groupBy(_._2.element).values.filter(_.size == 2)
     if (pairs.nonEmpty) Option(List(pairs.head.head._2, pairs.head.last._2))
     else Option.empty
   }
@@ -90,8 +91,8 @@ object Day11 extends Challenge {
   }
 
   def solve(): Int = {
-    var e = 0
-    var moves = 0
+    var e       = 0
+    var moves   = 0
     var upwards = true
     while (inventory.last.values.size < itemCount) {
       while (upwards) {
@@ -99,7 +100,7 @@ object Day11 extends Challenge {
           val pair = getPair(e)
           moveUp((pair.head, pair.last), e)
           moves = moves + 1
-          e  = e + 1
+          e = e + 1
         } else {
           upwards = false
         }
@@ -120,21 +121,24 @@ object Day11 extends Challenge {
 
   override def run(): Any = {
     val items = List[Map[String, Item]](
-       Map(
-         "THG" -> new Item("Thulium", 'G'),
-         "THM" -> new Item("Thulium", 'M'),
-         "PLG" -> new Item("Plutonium", 'G'),
-         "STG" -> new Item("Strontium", 'G')
-       ), Map(
-         "PLM" -> new Item("Plutonium", 'M'),
-         "STM" -> new Item("Strontium", 'M')
-       ), Map(
-         "PRG" -> new Item("Promethium", 'G'),
-         "PRM" -> new Item("Promethium", 'M'),
-         "RUG" -> new Item("Ruthenium", 'G'),
-         "RUM" -> new Item("Ruthenium", 'M')
-       ), Map()
-      )
+      Map(
+        "PLM" -> new Item("Plutonium", 'M'),
+        "PLG" -> new Item("Plutonium", 'G'),
+        "STM" -> new Item("Strontium", 'M'),
+        "STG" -> new Item("Strontium", 'G')
+      ),
+      Map(
+        "THG" -> new Item("Thulium", 'G'),
+        "RUG" -> new Item("Ruthenium", 'G'),
+        "RUM" -> new Item("Ruthenium", 'M'),
+        "CUG" -> new Item("Curium", 'G'),
+        "CUM" -> new Item("Curium", 'M'),
+      ),
+      Map(
+        "THM" -> new Item("Thulium", 'M'),
+      ),
+      Map()
+    )
 
     items.foreach(inventory += _)
     solve()

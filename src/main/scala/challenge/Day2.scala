@@ -19,16 +19,15 @@ object Day2 extends Challenge {
     @tailrec
     def enterDigit(s: List[Char], digit: Int): Int = s match {
       case Nil => digit
-      case h :: t => {
+      case h :: t =>
         enterDigit(t, f(digit, h))
-      }
     }
 
     enterDigit(xs, d)
   }
 
   override def run(): Any = {
-    val source = Source.fromResource("day2.txt").getLines.toList
+    val source   = Source.fromResource("day2.txt").getLines.toList
     val passages = source map (l => l.toList)
     val sequence = passages.scanLeft(5)((a, b) => getDigit(b, a)(nextDigit))
     (sequence drop 1).mkString.toInt

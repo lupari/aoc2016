@@ -4,7 +4,6 @@ import base.Challenge
 
 import scala.io.Source
 
-
 object Day6b extends Challenge {
 
   override def run(): Any = {

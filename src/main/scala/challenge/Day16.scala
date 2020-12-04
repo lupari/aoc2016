@@ -4,7 +4,6 @@ import base.Challenge
 
 object Day16 extends Challenge {
 
-
   def dragonCurve(n: Int, s: String): String = {
     def dc(s: String) = {
       s + '0' + s.reverse.replace('1', '2').replace('0', '1').replace('2', '0')
@@ -30,7 +29,7 @@ object Day16 extends Challenge {
   }
 
   override def run(): Any = {
-    checksum(dragonCurve(272, "10001001100000001"))
+    checksum(dragonCurve(272, "10011111011011001"))
   }
 
 }

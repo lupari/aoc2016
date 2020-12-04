@@ -13,14 +13,15 @@ object Day18b extends Challenge {
     @tailrec
     def countUp(row: String, acc: (Int, Int)): Int = acc match {
       case (x, y) if x == n => y
-      case (x, y) => countUp(nextRow(row), (x + 1, y + row.count(_ == '.')))
+      case (x, y)           => countUp(nextRow(row), (x + 1, y + row.count(_ == '.')))
     }
 
     countUp(init, (0, 0))
   }
 
   override def run(): Any = {
-    val row1 = "......^.^^.....^^^^^^^^^...^.^..^^.^^^..^.^..^.^^^.^^^^..^^.^.^.....^^^^^..^..^^^..^^.^.^..^^..^^^.."
+    val row1 =
+      "^..^^.^^^..^^.^...^^^^^....^.^..^^^.^.^.^^...^.^.^.^.^^.....^.^^.^.^.^.^.^.^^..^^^^^...^.....^....^."
     safeTiles(400000, row1)
   }
 

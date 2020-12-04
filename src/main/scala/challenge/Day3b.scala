@@ -12,7 +12,10 @@ object Day3b extends Challenge {
   }
 
   override def run(): Any = {
-    val input = Source.fromResource("day3.txt").getLines.toList
+    val input = Source
+      .fromResource("day3.txt")
+      .getLines
+      .toList
       .map(_.trim split " +" map (_.toInt))
     val triangles = input.transpose.flatMap(_.grouped(3).toList)
     triangles.count(isValid(_))

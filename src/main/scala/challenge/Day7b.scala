@@ -27,7 +27,7 @@ object Day7b extends Challenge {
 
   def getBab(xs: List[Char]): String = xs match {
     case a :: b :: c :: d if a == c && b != c => List(b, a, b).mkString
-    case _ => throw new NoSuchElementException
+    case _                                    => throw new NoSuchElementException
   }
 
   def isSsl(as: List[List[Char]], hs: List[List[Char]]): Boolean = {
@@ -36,7 +36,7 @@ object Day7b extends Challenge {
   }
 
   override def run(): Any = {
-    val ips = Source.fromResource("day7.txt").getLines.toList
+    val ips        = Source.fromResource("day7.txt").getLines.toList
     val ipsWithSsl = ips filter (ip => isSsl(addrParts(ip), hypernetParts(ip)))
     ipsWithSsl.length
   }

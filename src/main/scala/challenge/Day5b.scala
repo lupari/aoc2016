@@ -1,8 +1,9 @@
 package challenge
 
 import java.security.MessageDigest
-
 import base.Challenge
+
+import scala.annotation.tailrec
 
 object Day5b extends Challenge {
 
@@ -17,22 +18,24 @@ object Day5b extends Challenge {
   }
 
   def find(seed: String): String = {
+    @tailrec
     def inner(n: Int, m: Map[Int, Char]): String = m match {
       case s if s.size == 8 => (0 to 7).map(s(_)).mkString
-      case _ => pwdChar(seed + n) match {
-        case Some(pair) =>
-          val key = pair._1.asDigit
-          if (!m.keySet.contains(key) && key < 8) inner(n + 1, m + (key -> pair._2))
-          else inner(n + 1, m)
-        case _ => inner(n + 1, m)
-      }
+      case _ =>
+        pwdChar(seed + n) match {
+          case Some(pair) =>
+            val key = pair._1.asDigit
+            if (!m.keySet.contains(key) && key < 8) inner(n + 1, m + (key -> pair._2))
+            else inner(n + 1, m)
+          case _ => inner(n + 1, m)
+        }
     }
 
     inner(0, Map[Int, Char]())
   }
 
   override def run(): Any = {
-    find("uqwqemis")
+    find("cxdnnyjw")
   }
 
 }

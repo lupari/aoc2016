@@ -29,16 +29,18 @@ object Day17 extends Challenge {
 
   def nextPoints(p: Point, dirs: List[Char], seed: String): Set[(Point, Char)] = {
     (dir.keys zip md5(seed + dirs.mkString) take 4)
-      .filter(d => d._2 > 'a').map(d => (p + d._1, d._1))
-      .filter(_._1.withinBoundaries).toSet
+      .filter(d => d._2 > 'a')
+      .map(d => (p + d._1, d._1))
+      .filter(_._1.withinBoundaries)
+      .toSet
   }
 
   def bfs(start: Point, goal: Point, seed: String): List[List[Char]] = {
     val routes = mutable.ListBuffer[List[Char]]()
-    val queue = mutable.Queue[(Point, List[Point], List[Char])]((start, List(start), Nil))
+    val queue  = mutable.Queue[(Point, List[Point], List[Char])]((start, List(start), Nil))
     while (queue.nonEmpty) {
       val (point, path, dirs) = queue.dequeue
-      val neighbors = nextPoints(point, dirs, seed)
+      val neighbors           = nextPoints(point, dirs, seed)
       for (neighbor <- neighbors) {
         val (nextPoint, dir) = neighbor
         if (nextPoint == goal) routes += dirs :+ dir
@@ -49,9 +51,9 @@ object Day17 extends Challenge {
   }
 
   override def run(): Any = {
-    val seed = "vkjiggvb"
+    val seed         = "lpvhkcbi"
     val (start, end) = (Point(0, 0), Point(3, 3))
-    val paths = bfs(start, end, seed)
+    val paths        = bfs(start, end, seed)
     paths.minBy(p => p.length).mkString
   }
 

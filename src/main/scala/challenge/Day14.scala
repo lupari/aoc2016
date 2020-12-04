@@ -31,43 +31,21 @@ object Day14 extends Challenge {
             val matches = triplets(q.head).filter(_ + 1000 > id)
             triplets(q.head) = List(id)
             inner(id + 1, x ::: matches)
-          case _ => match3.findFirstIn(hash) match {
-            case Some(t) =>
-              triplets(t.head) = triplets(t.head) :+ id
-              inner(id + 1, x)
-            case _ =>
-              inner(id + 1, x)
-          }
+          case _ =>
+            match3.findFirstIn(hash) match {
+              case Some(t) =>
+                triplets(t.head) = triplets(t.head) :+ id
+                inner(id + 1, x)
+              case _ =>
+                inner(id + 1, x)
+            }
         }
     }
     inner(0, Nil).sorted
   }
 
   override def run(): Any = {
-    (findKeys("cuanljph") take 64).last
+    (findKeys("yjdafjpo") take 64).last
   }
 
-
-  /*
-
-   @tailrec
-    def inner(id: Int, acc: List[Int]): List[Int] = acc match {
-      case x if x.length >= 64 => acc
-      case x =>
-        val hash = md5(salt + id)
-        match5.findFirstIn(hash) match {
-          case Some(q) =>
-            val matches = triplets(q.head).filter(_ + 1000 > id)
-            triplets(q.head) = List(id)
-            inner(id + 1, x ::: matches)
-          case _ => match3.findFirstIn(hash) match {
-            case Some(t) =>
-              triplets(t.head) = triplets(t.head) :+ id
-              inner(id + 1, x)
-            case _ =>
-              inner(id + 1, x)
-          }
-        }
-    }
-   */
 }

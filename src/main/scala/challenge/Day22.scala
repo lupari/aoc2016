@@ -13,7 +13,7 @@ object Day22 extends Challenge {
   }
 
   override def run(): Any = {
-    val input = Source.fromResource("day22.txt").getLines.toList
+    val input   = Source.fromResource("day22.txt").getLines.toList
     val pattern = """^.*-x(\d+)-y(\d+)\s+(\d+)T\s+(\d+)T\s+(\d+)T\s+(\d+)%$""".r
     val nodes = input.drop(2).map {
       case pattern(x, y, size, used, avail, load) => Node(y.toInt, x.toInt, used.toInt, avail.toInt)

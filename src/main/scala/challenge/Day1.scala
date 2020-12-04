@@ -24,22 +24,22 @@ object Day1 extends Challenge {
     }
 
     @tailrec
-    def drive(xs: List[(Char, Int)], dir: Char, acc: List[(Int, Int)]): List[(Int, Int)] = xs match {
-      case Nil => acc
-      case h :: t => {
-        val newDir = nextDir(dir, h._1)
-        val newCoords = updateCoords(newDir, h._2, acc.last)
-        drive(t, newDir, acc ::: newCoords)
+    def drive(xs: List[(Char, Int)], dir: Char, acc: List[(Int, Int)]): List[(Int, Int)] =
+      xs match {
+        case Nil => acc
+        case h :: t =>
+          val newDir    = nextDir(dir, h._1)
+          val newCoords = updateCoords(newDir, h._2, acc.last)
+          drive(t, newDir, acc ::: newCoords)
       }
-    }
 
     drive(xs, 'N', List((0, 0)))
   }
 
   override def run(): Any = {
-    val lines = Source.fromResource("day1.txt").mkString
+    val lines  = Source.fromResource("day1.txt").mkString
     val blocks = lines.trim.split(", ") map (b => (b.head, b.drop(1).toInt))
-    val route = getRoute(blocks.toList)
+    val route  = getRoute(blocks.toList)
     math.abs(route.last._1) + math.abs(route.last._2)
   }
 

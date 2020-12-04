@@ -2,6 +2,7 @@ package challenge
 
 import base.Challenge
 
+import scala.annotation.tailrec
 import scala.io.Source
 
 object Day7 extends Challenge {
@@ -17,6 +18,7 @@ object Day7 extends Challenge {
     res.flatten map (_.toList)
   }
 
+  @tailrec
   def hasTls(xs: List[Char]): Boolean = xs match {
     case a :: b :: c :: d :: t =>
       if (a == d && b == c && a != b) true else hasTls(b :: c :: d :: t)
@@ -25,7 +27,8 @@ object Day7 extends Challenge {
 
   override def run(): Any = {
     val ips = Source.fromResource("day7.txt").getLines.toList
-    val ipsWithTls = ips filter (ip => addrParts(ip).exists(hasTls) && !hypernetParts(ip).exists(hasTls))
+    val ipsWithTls = ips filter (ip =>
+      addrParts(ip).exists(hasTls) && !hypernetParts(ip).exists(hasTls))
     ipsWithTls.length
   }
 

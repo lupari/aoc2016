@@ -13,9 +13,9 @@ object Day5 extends Challenge {
   def pwdChar(s: String): Option[Char] = {
     val hash = digest.digest(s.getBytes)
     if (hash(0) == 0
-      && hash(1) == 0
-      && (hash(2) & 0xF0) == 0
-    ) Some(hash.map("%02x".format(_)).mkString.charAt(5)) else None
+        && hash(1) == 0
+        && (hash(2) & 0xF0) == 0) Some(hash.map("%02x".format(_)).mkString.charAt(5))
+    else None
   }
 
   def find(seed: String): String = {
@@ -23,17 +23,18 @@ object Day5 extends Challenge {
     @tailrec
     def inner(n: Int, pwd: String): String = pwd match {
       case s if s.length == 8 => s
-      case _ => pwdChar(seed + n) match {
-        case Some(c) => inner(n + 1, pwd + c)
-        case _ => inner(n + 1, pwd)
-      }
+      case _ =>
+        pwdChar(seed + n) match {
+          case Some(c) => inner(n + 1, pwd + c)
+          case _       => inner(n + 1, pwd)
+        }
     }
 
     inner(0, "")
   }
 
   override def run(): Any = {
-    find("uqwqemis")
+    find("cxdnnyjw")
   }
 
 }

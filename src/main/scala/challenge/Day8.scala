@@ -21,7 +21,7 @@ object Day8 extends Challenge {
     val Array(n) = cmd.split(" ") takeRight 1 map (_.toInt)
     val Array(z) = cmd.split(" ").slice(2, 3) map (a => a drop 2) map (_.toInt)
     val vertical = cmd.contains("column")
-    val dim = if (vertical) 6 else 50
+    val dim      = if (vertical) 6 else 50
     for (i <- 1 to n) {
       val container = Array.ofDim[Int](dim)
       for (j <- 0 until dim) {
@@ -36,15 +36,13 @@ object Day8 extends Challenge {
   }
 
   def runCommand(cmd: String): Any = cmd match {
-    case x if x.startsWith("rect") => drawRect(x)
+    case x if x.startsWith("rect")   => drawRect(x)
     case x if x.startsWith("rotate") => rotate(x)
   }
 
   override def run(): Any = {
     val input = Source.fromResource("day8.txt").getLines.toList
-    for (
-      cmd <- input
-    ) yield runCommand(cmd)
+    for (cmd <- input) yield runCommand(cmd)
 
     display.flatten.count(_ == 1)
   }

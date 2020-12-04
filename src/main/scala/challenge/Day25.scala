@@ -2,13 +2,15 @@ package challenge
 
 import base.Challenge
 
+import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object Day25 extends Challenge {
 
-  val registry: mutable.Map[Char, Int] = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
+  val registry: mutable.Map[Char, Int] =
+    mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
   val clock: ListBuffer[Int] = mutable.ListBuffer[Int]()
 
   abstract class Instruction {
@@ -30,14 +32,16 @@ object Day25 extends Challenge {
     override def toString: String = "jnz " + _a + " " + _b
 
     override def exec: Int = _a match {
-      case i: Int => if (i > 0) _b match {
-        case j: Int => j
-        case j: Char => registry(j)
-      } else 1
-      case c: Char => if (registry(c) > 0) _b match {
-        case j: Int => j
-        case j: Char => registry(j)
-      } else 1
+      case i: Int =>
+        if (i > 0) _b match {
+          case j: Int  => j
+          case j: Char => registry(j)
+        } else 1
+      case c: Char =>
+        if (registry(c) > 0) _b match {
+          case j: Int  => j
+          case j: Char => registry(j)
+        } else 1
     }
   }
 
@@ -45,7 +49,7 @@ object Day25 extends Challenge {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
 
     def this(cmd: String) = {
-      this((cmd split ' ' slice(1, 2)).mkString, cmd.split(' ').last.head)
+      this((cmd split ' ' slice (1, 2)).mkString, cmd.split(' ').last.head)
     }
 
     override def toString: String = "cpy " + _a + " " + b
@@ -94,10 +98,10 @@ object Day25 extends Challenge {
     override def exec: Int = {
       val i = registry(a)
       (clock.toList.reverse, i) match {
-        case (Nil, 0) => clock += 0; 1
+        case (Nil, 0)    => clock += 0; 1
         case (1 :: t, 0) => clock += 0; 1
         case (0 :: t, 1) => clock += 1; 1
-        case _ => 0
+        case _           => 0
       }
     }
   }
@@ -117,6 +121,7 @@ object Day25 extends Challenge {
     registry('d') = 0
     clock.clear
 
+    @tailrec
     def inner(p: Int): Boolean = p match {
       case i if i >= instructions.length => false
       case i =>
@@ -134,9 +139,11 @@ object Day25 extends Challenge {
     def input = Source.fromResource("day25.txt").getLines.toList
 
     val instructions = input.map(parse)
-    var a = 1
-    while (!exec(a, instructions)) a += 1
-    a
+    Iterator
+      .iterate((false, 1))(a => (exec(a._2, instructions), a._2 + 1))
+      .dropWhile(!_._1)
+      .next
+      ._2 - 1
   }
 
 }

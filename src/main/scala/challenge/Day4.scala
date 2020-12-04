@@ -12,13 +12,13 @@ object Day4 extends Challenge {
 
   def name(s: String): String = (s take s.length - 11) filterNot (_ == '-')
 
-  def occurrences(s: String): List[Char] = s.groupBy(identity)
-    .map(x => (x._1, x._2.length)).toList
-    .sortWith((a, b) => if (a._2 == b._2) a._1 < b._1 else a._2 > b._2) map (_._1)
+  def occurrences(s: String): List[Char] =
+    s.groupBy(identity)
+      .map(x => (x._1, x._2.length))
+      .toList
+      .sortWith((a, b) => if (a._2 == b._2) a._1 < b._1 else a._2 > b._2) map (_._1)
 
-  def generateChecksum(s: String): String = {
-    (occurrences(name(s)) take 5).mkString
-  }
+  def generateChecksum(s: String): String = (occurrences(name(s)) take 5).mkString
 
   def isValid(s: String): Boolean = checksum(s) == generateChecksum(s)
 
@@ -34,7 +34,7 @@ object Day4 extends Challenge {
   }
 
   override def run(): Any = {
-    val codes = Source.fromResource("day4.txt").getLines.toList
+    val codes     = Source.fromResource("day4.txt").getLines.toList
     val sectorIds = codes filter isValid map sectorId
     sectorIds.sum
   }

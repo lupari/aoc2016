@@ -21,7 +21,7 @@ object Day13b extends Challenge {
 
   def aStar(start: Point, goal: Point)(costFn: (Point, Point) => Int): Map[Point, Int] = {
     val frontier = mutable.ListBuffer[(Point, Int)]((start, 0))
-    val costs = mutable.Map[Point, Int](start -> 0)
+    val costs    = mutable.Map[Point, Int](start -> 0)
     while (frontier.nonEmpty) {
       val current = frontier.minBy(_._2)
       frontier -= current
@@ -29,7 +29,8 @@ object Day13b extends Challenge {
       else {
         val newCost = costs(current._1) + 1
         val neighbors = List(Delta(0, -1), Delta(0, 1), Delta(1, 0), Delta(-1, 0))
-          .map(current._1 + _).filter(p => p.withinBoundaries && !p.isWall)
+          .map(current._1 + _)
+          .filter(p => p.withinBoundaries && !p.isWall)
         for (next <- neighbors) {
           if (!costs.contains(next) || newCost < costs(next)) {
             costs(next) = newCost

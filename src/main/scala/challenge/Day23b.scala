@@ -8,7 +8,8 @@ import scala.io.Source
 
 object Day23b extends Challenge {
 
-  val registry: mutable.Map[Char, Int] = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
+  val registry: mutable.Map[Char, Int] =
+    mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
   val instructions: ListBuffer[Instruction] = mutable.ListBuffer[Instruction]()
 
   abstract class Instruction {
@@ -30,14 +31,16 @@ object Day23b extends Challenge {
     override def toString: String = "jnz " + _a + " " + _b
 
     override def exec(args: AnyVal*): Int = _a match {
-      case i: Int => if (i > 0) _b match {
-        case j: Int => j
-        case j: Char => registry(j)
-      } else 1
-      case c: Char => if (registry(c) > 0) _b match {
-        case j: Int => j
-        case j: Char => registry(j)
-      } else 1
+      case i: Int =>
+        if (i > 0) _b match {
+          case j: Int  => j
+          case j: Char => registry(j)
+        } else 1
+      case c: Char =>
+        if (registry(c) > 0) _b match {
+          case j: Int  => j
+          case j: Char => registry(j)
+        } else 1
     }
   }
 
@@ -45,7 +48,7 @@ object Day23b extends Challenge {
     val _a: AnyVal = if (a.forall(_.isLetter)) a.head else a.toInt
 
     def this(cmd: String) = {
-      this((cmd split ' ' slice(1, 2)).mkString, cmd.split(' ').last.head)
+      this((cmd split ' ' slice (1, 2)).mkString, cmd.split(' ').last.head)
     }
 
     override def toString: String = "cpy " + _a + " " + b
@@ -113,11 +116,11 @@ object Day23b extends Challenge {
     }
 
     def toggleInstruction(x: Instruction): Instruction = x match {
-      case i: Inc => Dec(i.a)
-      case i: Dec => Inc(i.a)
+      case i: Inc    => Dec(i.a)
+      case i: Dec    => Inc(i.a)
       case i: Toggle => Inc(i.a)
-      case i: Jump => Copy(i.a, i.b.head)
-      case i: Copy => Jump(i.a, i.b.toString)
+      case i: Jump   => Copy(i.a, i.b.head)
+      case i: Copy   => Jump(i.a, i.b.toString)
     }
 
     override def toString: String = "tgl " + a

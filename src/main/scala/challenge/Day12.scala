@@ -7,7 +7,8 @@ import scala.io.Source
 
 object Day12 extends Challenge {
 
-  val registry: mutable.Map[Char, Int] = mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
+  val registry: mutable.Map[Char, Int] =
+    mutable.Map[Char, Int]('a' -> 0, 'b' -> 0, 'c' -> 0, 'd' -> 0)
 
   abstract class Instruction {
     def exec: Int
@@ -15,20 +16,20 @@ object Day12 extends Challenge {
 
   class Jump(cmd: String) extends Instruction {
     val a: AnyVal = {
-      val operand = (cmd split ' ' slice(1, 2)).mkString
+      val operand = (cmd split ' ' slice (1, 2)).mkString
       if (operand.forall(_.isDigit)) operand.toInt else operand.head
     }
     val b: Int = cmd.split(' ').last.toInt
 
     override def exec: Int = a match {
-      case i: Int => if (i > 0) b else 1
+      case i: Int  => if (i > 0) b else 1
       case c: Char => if (registry(c) > 0) b else 1
     }
   }
 
   class Copy(cmd: String) extends Instruction {
     val a: AnyVal = {
-      val operand = (cmd split ' ' slice(1, 2)).mkString
+      val operand = (cmd split ' ' slice (1, 2)).mkString
       if (operand.forall(_.isDigit)) operand.toInt else operand.head
     }
     val b: Char = (cmd split ' ').last.head

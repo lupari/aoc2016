@@ -10,7 +10,7 @@ object Day19 extends Challenge {
   }
 
   override def run(): Any = {
-    solveSimple(3012210)
+    solveSimple(3018458)
   }
 
 }
