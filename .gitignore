@@ -1,0 +1,7 @@
+target
+.idea
+.ensime
+.ensime_cache
+project/project
+*.sc
+
